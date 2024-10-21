@@ -1,5 +1,4 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 
 public class MovingObject : MonoBehaviour
@@ -14,7 +13,7 @@ public class MovingObject : MonoBehaviour
     {
         pos1 = transform.position;
         StartCoroutine(MoveObject(pos1, pos2));
-        InvokeRepeating("ChangeObjectDestination", 0, 1);
+        InvokeRepeating("ChangeObjectDestination", 0, 0.1f);
     }
 
     private void ChangeObjectDestination()
@@ -29,7 +28,8 @@ public class MovingObject : MonoBehaviour
 
     private IEnumerator MoveObject(Vector3 from, Vector3 to)
     {
-        yield return new WaitForSeconds(waitTime);
+        if (waitTime > 0) 
+            yield return new WaitForSeconds(waitTime);
         float time = 0;
         float axisX, axisY, axisZ;
 

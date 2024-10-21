@@ -9,6 +9,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField][Range(0, 1)] private float smoothnes;
     [SerializeField] private Vector3 offset;
     private Vector3 velocity = Vector3.zero;
+    private Vector3 camClosePos = new Vector3(1.5f, 0.5f, 0f);
     private float mouseMove;
     private LayerMask camUpLayer;
     private bool setCamPosUp;
@@ -20,9 +21,8 @@ public class CameraMovement : MonoBehaviour
             if (setCamPosUp != value)
             {
                 setCamPosUp = value;
-                if (setCamPosUp) playerCamera.transform.localPosition = new Vector3(1.5f, 0.5f, 0f);
-                else playerCamera.transform.localPosition = offset;
-                StartCoroutine(SetCameraRotationAfterSec(0.8f));
+                StartCoroutine(SetCameraRotationAfterSec(0.1f));
+                //playerCamera.transform.LookAt(player.position);
             }
         }
     }
@@ -44,6 +44,14 @@ public class CameraMovement : MonoBehaviour
     void LateUpdate()
     {
         SetCamPos = Physics.CheckSphere(player.position - new Vector3(0f, 3f, 0f), 3f, camUpLayer);
+        if (setCamPosUp)
+        {
+            playerCamera.transform.localPosition = camClosePos;
+        }
+        else
+        {
+            playerCamera.transform.localPosition = offset;
+        }
 
         //Vector3 smothedPosition = Vector3.Lerp(transform.position, player.position, smoothnes);
         transform.localRotation = Quaternion.Euler(0f, mouseMove, 0f);

@@ -1,7 +1,6 @@
-using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
+using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.XR;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -74,19 +73,23 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField][Range(0.1f, 2f)] float test;  
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            SceneManager.LoadScene("Lobby");
         IsPlayerOnLayer();
         PlayerAttachmentsMovement();
         ChangePlayerMaterial();
         if (!isGrounded) PlayFallingSound();
-        if (Input.GetKey(KeyCode.K))
+        /*if (Input.GetKey(KeyCode.K))
         {
             audioSourceMain.pitch = test;
             audioSourceMain.Play();
-        }
+        }*/
     }
 
     private void FixedUpdate()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+            KillPlayer();
         IsGrounded = Physics.CheckSphere(new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z), 0.2f, groundLayer);
         PlayerSphereMovement();
     }
@@ -94,7 +97,8 @@ public class PlayerMovement : MonoBehaviour
     private void PlayerSphereMovement()
     {
         sphereRigidBody.drag = isGrounded ? (isOnIce ? 0.2f : drag) : 0.1f;
-        if (!isGrounded) return;
+        if (!isGrounded) 
+            return;
 
         float speedForce = speedinterval * Time.deltaTime;
         Vector3 direction = (playerCam.right * Input.GetAxis("Horizontal")) + (playerCam.forward * Input.GetAxis("Vertical"));
@@ -131,18 +135,23 @@ public class PlayerMovement : MonoBehaviour
     private void IsPlayerOnLayer()
     {
         if (Physics.CheckSphere(transform.position, 0.6f, deathLayer))
-        {
-            sphereRigidBody.velocity = Vector3.zero;
-            sphereRigidBody.angularVelocity = Vector3.zero;
-            transform.position = GameManager.Instance.GetLastCheckPointPosition();
-            audioSourceMain.clip = teleportSound;
-            audioSourceMain.volume = 0.8f;
-            audioSourceMain.pitch = Random.Range(0.9f, 1.2f);
-            audioSourceMain.spatialBlend = 0.7f;
-            audioSourceMain.Play();
-        }
+            KillPlayer();
 
         isOnIce = Physics.CheckSphere(new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z), 0.1f, iceLayer);
+    }
+
+    private async void KillPlayer()
+    {
+        Debug.Log("test");
+        sphereRigidBody.Sleep();
+        sphereRigidBody.velocity = Vector3.zero;
+        sphereRigidBody.angularVelocity = Vector3.zero;
+        transform.position = GameManager.Instance.GetLastCheckPointPosition();
+        audioSourceMain.clip = teleportSound;
+        audioSourceMain.volume = 0.8f;
+        audioSourceMain.pitch = Random.Range(0.9f, 1.2f);
+        audioSourceMain.spatialBlend = 0.7f;
+        audioSourceMain.Play();
     }
 
     private Vector3 lastPlayerPos;

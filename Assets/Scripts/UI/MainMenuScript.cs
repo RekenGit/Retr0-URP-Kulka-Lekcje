@@ -8,6 +8,8 @@ public class MainMenuScript : MonoBehaviour
     [SerializeField] private int levelsCount = 1;
     [SerializeField] private Transform levelSelectPanel;
     [SerializeField] private GameObject levelButtonPrefab;
+    [SerializeField] private GameObject cheatsGO;
+    static bool isCheatsOn = false;
     private int page = 0;
     private int lastActiveLevel = 1;
     private Animator animator;
@@ -18,6 +20,16 @@ public class MainMenuScript : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined;
         lastActiveLevel = PlayerPrefs.GetInt("LastSavedLevel") != 0 ? PlayerPrefs.GetInt("LastSavedLevel") : 1;
         animator = GetComponent<Animator>();
+        if (isCheatsOn)
+            lastActiveLevel = 100;
+        StartCoroutine(CreateLevelButtons());
+    }
+
+    public void CheatsOn()
+    {
+        cheatsGO.GetComponent<Image>().color = Color.red;
+        isCheatsOn = true;
+        lastActiveLevel = 100;
         StartCoroutine(CreateLevelButtons());
     }
 
