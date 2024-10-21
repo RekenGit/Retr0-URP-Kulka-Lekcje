@@ -11,11 +11,10 @@ Also in free time I polished my version of that game so it could be looking bett
 - Main menu with 3d interface.
 - 5 game levels.
 - Automaticly saving game progress.
-- 
 
 ## Pictures:
-![Obrazek pokazuj¹cy lobby #1](...)
-![Obrazek pokazuj¹cy gameplay #1](...)
+![Obrazek pokazujÄ…cy lobby #1](https://github.com/RekenGit/Simple-Sphere-Parkour-Game/assets/72222392/5b244b54-e449-49b2-96d3-3a2478f92a01)
+![Obrazek pokazujÄ…cy gameplay #1](https://github.com/RekenGit/Simple-Sphere-Parkour-Game/assets/72222392/d38af1e5-bc48-4698-a584-4234675387ac)
 
 
 
